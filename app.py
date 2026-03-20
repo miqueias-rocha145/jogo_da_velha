@@ -17,15 +17,39 @@ class tabuleiro:
 
     def checar_resultados(self):
 
-        #Verificação vertical
-        while True:
+        vencedor = ""
 
+        while True:
+            
+            #Verificação Vertical
             for tipo in ['X','O']:
                 for coluna in self.tabuleiro.values():
                     contagem = coluna.count(tipo)
                     if contagem == 3:
-                        print('Vencedor:',tipo)
-                        break
+                        print('Vencedor (Vertical):',tipo)
+                        vencedor = tipo
+                        return vencedor
+
+            #Verificação Horizontal
+            for tipo in ['X','O']:
+                for _ in range(3):
+                    temp = []
+                    for coluna in self.tabuleiro.values():
+                        '''Adiciona posição por posição na lista temp,
+                        depois conta tipos e retorna vencedor caso 3 iguais ou reinicia lista temp
+                        '''
+                        temp.append(coluna[_])
+
+                    contagem = temp.count(tipo)
+                    
+                    if contagem == 3:
+                        print('Vencedor (Horizontal):',tipo)
+                        vencedor = tipo
+                        return vencedor
+                    
+                    temp.clear()
+                        
+
                 
             break
                           
