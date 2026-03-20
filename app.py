@@ -12,7 +12,7 @@ class tabuleiro:
         print('---------------')
         print(f' {self.tabuleiro[1][1]}  |  {self.tabuleiro[2][1]}  |  {self.tabuleiro[3][1]} ')
         print('---------------')
-        print(f' {self.tabuleiro[1][2]}  |  {self.tabuleiro[2][2]}  |  {self.tabuleiro[3][2]} ')
+        print(f' {self.tabuleiro[1][2]}  |  {self.tabuleiro[2][2]}  |  {self.tabuleiro[3][2]} \n')
 
     def jogadas_disponiveis(self):
         #Gera tupla de chave e posição disponível
