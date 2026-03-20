@@ -2,6 +2,7 @@ import random
 
 class tabuleiro:
     def __init__(self):
+        #Criando 4 colunas com lista default e 3 itens
         self.tabuleiro = {x:[0,0,0] for x in range(1,4)}
 
     
@@ -16,12 +17,21 @@ class tabuleiro:
         self.tabuleiro[coluna][linha] = valor
 
     def checar_resultados(self):
-        for i in self.tabuleiro.values():
-            print(i)
-        
-                          
-jogo = tabuleiro()
+        lista_resultados = list(self.tabuleiro.values())
 
-jogo.fazer_jogada(1,1,'X')
+        while True:
+            
+            #Verificação vertical
+            for tipo in ['X','O']:
+                for i in lista_resultados:
+                    contagem = i.count(tipo)
+                    if contagem == 3:
+                        print('Vencedor:',tipo)
+                        break
+
+            break
+
+             
+jogo = tabuleiro()
 
 jogo.mostrar_tabuleiro()
