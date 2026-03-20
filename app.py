@@ -16,9 +16,18 @@ class tabuleiro:
         self.tabuleiro[coluna][linha] = valor
 
     def checar_resultados(self):
-        for i in self.tabuleiro.values():
-            print(i)
-        
+
+        #Verificação vertical
+        while True:
+
+            for tipo in ['X','O']:
+                for coluna in self.tabuleiro.values():
+                    contagem = coluna.count(tipo)
+                    if contagem == 3:
+                        print('Vencedor:',tipo)
+                        break
+                
+            break
                           
 jogo = tabuleiro()
 
