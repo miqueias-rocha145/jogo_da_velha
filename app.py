@@ -2,7 +2,7 @@ import random
 
 class tabuleiro:
     def __init__(self):
-        self.tabuleiro = {x:[0,0,0] for x in range(1,4)}
+        self.tabuleiro = {x:[' ',' ',' '] for x in range(1,4)}
 
     
     def mostrar_tabuleiro(self):
@@ -17,14 +17,13 @@ class tabuleiro:
 
     def checar_resultados(self):
 
-        vencedor = ""
-
+        vencedor = None
         while True:
-            
             #Verificação Vertical
             for tipo in ['X','O']:
                 for coluna in self.tabuleiro.values():
                     contagem = coluna.count(tipo)
+
                     if contagem == 3:
                         print('Vencedor (Vertical):',tipo)
                         vencedor = tipo
@@ -39,22 +38,48 @@ class tabuleiro:
                         depois conta tipos e retorna vencedor caso 3 iguais ou reinicia lista temp
                         '''
                         temp.append(coluna[_])
-
                     contagem = temp.count(tipo)
                     
                     if contagem == 3:
                         print('Vencedor (Horizontal):',tipo)
                         vencedor = tipo
                         return vencedor
-                    
                     temp.clear()
-                        
 
-                
-            break
+            #Verificações Diagonal Crescente
+            for tipo in ['X','O']:
+                ident = 0
+                temp = []
+                for coluna in self.tabuleiro.values():
+                    temp.append(coluna[ident])
+                    ident += 1
+
+                contagem = temp.count(tipo)
+
+                if contagem == 3:
+                    print('Vencedor (Diag. crescente):',tipo)
+                    vencedor = tipo
+                    return vencedor 
+                temp.clear()
+
+            #Verificações Diagonal Decrescente
+            for tipo in ['X','O']:
+                ident = 2
+                temp = []
+
+                for coluna in self.tabuleiro.values():
+                    temp.append(coluna[ident])
+                    ident -= 1
+                contagem = temp.count(tipo)
+
+                if contagem == 3:
+                    print('Vencedor (Diag. Decrescente):',tipo)
+                    vencedor = tipo
+                    return vencedor
+                temp.clear()
+                        
+            return vencedor
                           
 jogo = tabuleiro()
-
-jogo.fazer_jogada(1,1,'X')
 
 jogo.mostrar_tabuleiro()
