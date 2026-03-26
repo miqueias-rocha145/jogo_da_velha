@@ -1,4 +1,5 @@
 import random
+import os
 
 class PosicaoOcupadaError(Exception):
     pass
@@ -6,6 +7,13 @@ class PosicaoOcupadaError(Exception):
 class tabuleiro:
     def __init__(self):
         self.tabuleiro = {x:[' ',' ',' '] for x in range(1,4)}
+
+    def embaralhar_escolhas(self):
+        print('-'*15,'Jogo da Velha', '-'*15)
+
+        escolhas = ['X','O']
+        random.shuffle(escolhas)
+        return escolhas
 
     def mostrar_tabuleiro(self):
         print(f' {self.tabuleiro[1][0]}  |  {self.tabuleiro[2][0]}  |  {self.tabuleiro[3][0]} ')
@@ -24,11 +32,20 @@ class tabuleiro:
 
         return dicionario_disponiveis
     
-    def fazer_jogada(self,coluna,linha, valor):
-        if not(self.tabuleiro[coluna][linha] == ' '): 
-            raise PosicaoOcupadaError("Posição já está ocupada.")
-        else:
-            self.tabuleiro[coluna][linha] = valor
+    def fazer_jogada(self,coluna=None,linha=None, valor=str, tipo_jogador=int):
+
+        if tipo_jogador == 1:
+            if not(self.tabuleiro[coluna][linha] == ' '): 
+                raise PosicaoOcupadaError("Posição já está ocupada.")
+            else:
+                self.tabuleiro[coluna][linha] = valor
+
+        elif tipo_jogador == 2:
+            escolha_computer = random.choice(self.jogadas_disponiveis())
+            coluna_computador = escolha_computer[0]
+            linha_computador = escolha_computer[1]
+            
+            self.tabuleiro[coluna_computador][linha_computador] = valor
 
     def checar_resultados(self):
 
@@ -96,17 +113,24 @@ class tabuleiro:
             return vencedor
         
 class jogador:
-    def __init__(self,tipo,valor,tabuleiro):
+    def __init__(self,nome,tipo,valor,tabuleiro):
+        self.nome = nome
         self.tipo = tipo #1: Player1 | 2: Computador
         self.valor = valor
         self.tabuleiro = tabuleiro
 
-    def tabuleiro_disponivel(self):
-        return self.tabuleiro.jogadas_disponiveis()
+    def mostrar_escolha(self):
+        print(f'{self.nome}: {self.valor}')
 
-    def fazer_jogada(self,coluna,linha):
-        self.tabuleiro.fazer_jogada(coluna,linha,self.valor)
-    
+    def fazer_jogada(self,coluna=None,linha=None):
+        
+        if self.tipo == 1:
+            coluna = int(input('Qual coluna? (Entre 1 e 3): '))
+            linha = int(input('Qual a linha (Entre 0 e 2): '))
+
+        os.system("cls")
+
+        self.tabuleiro.fazer_jogada(coluna,linha,self.valor,self.tipo)
         self.tabuleiro.mostrar_tabuleiro()
         self.tabuleiro.checar_resultados()
                    
@@ -114,44 +138,29 @@ jogo = tabuleiro()
 
 
 while True:
-    print('-'*15,'Jogo da Velha', '-'*15)
 
-    escolhas = ['X','O']
-    random.shuffle(escolhas)
+    escolhas = jogo.embaralhar_escolhas()
 
-    player1 = jogador(1,escolhas[0],jogo)
-    computer = jogador(2,escolhas[1],jogo)
+    player1 = jogador("Player1",1,escolhas[0],jogo)
+    computer = jogador("Computador",2,escolhas[1],jogo)
 
-    print(f'\nPlayer 1: {player1.valor}')
-    print(f'Computador: {computer.valor}\n')
-
-    print('X começa...\n')
+    player1.mostrar_escolha()
+    computer.mostrar_escolha()
 
     if player1.valor == 'X':
-        coluna = int(input('Qual coluna? (Entre 1 e 3): '))
-        linha = int(input('Qual a linha (Entre 0 e 2): '))
-        player1.fazer_jogada(coluna,linha)
+        player1.fazer_jogada()
         rodada = 1
     else:
-        escolha_computer = random.choice(computer.tabuleiro_disponivel())
-        coluna = escolha_computer[0]
-        linha = escolha_computer[1]
-        computer.fazer_jogada(coluna,linha)
+        computer.fazer_jogada()
         rodada = 0
 
-   
     while True:
         if rodada == 1:
-            escolha_computer = random.choice(computer.tabuleiro_disponivel())
-            coluna = escolha_computer[0]
-            linha = escolha_computer[1]
-            computer.fazer_jogada(coluna,linha)
+            computer.fazer_jogada()
             rodada = 0
 
         elif rodada == 0:
-            coluna = int(input('Qual coluna? (Entre 1 e 3): '))
-            linha = int(input('Qual a linha (Entre 0 e 2): '))
-            player1.fazer_jogada(coluna,linha)
+            player1.fazer_jogada()
             rodada = 1
 
         #Checa se retorno de resultados não é None e checa se ainda tem jogadas disponíves e retorna False caso tenha
