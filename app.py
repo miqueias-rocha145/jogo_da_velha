@@ -33,12 +33,16 @@ class tabuleiro:
         return dicionario_disponiveis
     
     def fazer_jogada(self,coluna=None,linha=None, valor=str, tipo_jogador=int):
-
+        
         if tipo_jogador == 1:
-            if not(self.tabuleiro[coluna][linha] == ' '): 
+            
+            #Normalizando indexação da linha 
+            linha_usuario = linha - 1
+
+            if not(self.tabuleiro[coluna][linha_usuario] == ' '): 
                 raise PosicaoOcupadaError("Posição já está ocupada.")
             else:
-                self.tabuleiro[coluna][linha] = valor
+                self.tabuleiro[coluna][linha_usuario] = valor
 
         elif tipo_jogador == 2:
             escolha_computer = random.choice(self.jogadas_disponiveis())
@@ -120,15 +124,17 @@ class jogador:
         self.tabuleiro = tabuleiro
 
     def mostrar_escolha(self):
-        print(f'{self.nome}: {self.valor}')
+        print(f'{self.nome}: {self.valor}\n')
 
     def fazer_jogada(self,coluna=None,linha=None):
         
         if self.tipo == 1:
             coluna = int(input('Qual coluna? (Entre 1 e 3): '))
-            linha = int(input('Qual a linha (Entre 0 e 2): '))
+            linha = int(input('Qual a linha (Entre 1 e 3): '))
 
         os.system("cls")
+
+        self.mostrar_escolha()
 
         self.tabuleiro.fazer_jogada(coluna,linha,self.valor,self.tipo)
         self.tabuleiro.mostrar_tabuleiro()
